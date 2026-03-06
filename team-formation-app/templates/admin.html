@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://uploads.onecompiler.io/42zp5pya9/44fjf3z6v/logo.png">
+    <title>Admin Panel - CSE DBMS Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg') no-repeat center center fixed;
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .stat-box .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-box .label {
+            color: #666;
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+
+        .actions-bar {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+            transform: scale(1.05);
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-warning:hover {
+            background: #e0a800;
+            transform: scale(1.05);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin: 20px 0;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .teams-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .team-title h2 {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .team-title .team-number {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .team-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-icon.delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-icon.delete:hover {
+            background: #c82333;
+        }
+
+        .btn-icon.edit {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-icon.edit:hover {
+            background: #e0a800;
+        }
+
+        .btn-icon.admin-edit {
+            background: #6610f2;
+            color: white;
+        }
+
+        .btn-icon.admin-edit:hover {
+            background: #520dc2;
+        }
+
+        .team-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-item .label {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .info-item .value {
+            color: #333;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .secret-key-item {
+            grid-column: span 2;
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ffeeba;
+        }
+
+        .secret-key-display {
+            font-family: monospace;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #856404;
+            cursor: pointer;
+            padding: 5px 10px;
+            background: white;
+            border-radius: 5px;
+            display: inline-block;
+            border: 1px dashed #856404;
+        }
+
+        .secret-key-display:hover {
+            background: #fff3cd;
+        }
+
+        .members-section {
+            margin-top: 15px;
+        }
+
+        .members-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .members-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+
+        .member-item {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .member-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .member-usn {
+            color: #667eea;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .team-footer {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 2px dashed #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .secret-badge {
+            background: #ffd700;
+            color: #333;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #28a745;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        .toast.info {
+            background: #17a2b8;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #999;
+        }
+
+        .empty-state .icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            .team-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .members-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-bar {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🔧 Admin Panel</h1>
+            <p>Manage all teams - View, Delete, and Export Data</p>
+        </header>
+
+        <div class="main-content">
+            <a href="/" class="back-link">← Back to Home</a>
+
+            <div class="stats-container" id="stats">
+                <div class="stat-box">
+                    <div class="number" id="totalTeams">0</div>
+                    <div class="label">Total Teams</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="totalMembers">0</div>
+                    <div class="label">Total Members</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number" id="avgTeamSize">0</div>
+                    <div class="label">Avg Team Size</div>
+                </div>
+            </div>
+
+            <div class="actions-bar">
+                <button onclick="refreshTeams()" class="btn btn-primary">🔄 Refresh Teams</button>
+                <a href="/download-csv" class="btn btn-success">📥 Download Master CSV</a>
+                <a href="/view-csv" class="btn btn-info">📊 View CSV</a>
+            </div>
+
+            <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search by team name, number, or member name..." onkeyup="filterTeams()">
+
+            <div id="loadingSpinner" class="loading" style="display: none;">
+                <div style="font-size: 2em;">⏳</div>
+                <p>Loading teams...</p>
+            </div>
+
+            <div id="teamsContainer" class="teams-container"></div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h3>⚠️ Delete Team</h3>
+            <p>Are you sure you want to delete <strong id="deleteTeamName"></strong>?</p>
+            <p style="color: #dc3545;">This action cannot be undone!</p>
+            <div class="modal-actions">
+                <button onclick="confirmDelete()" class="btn btn-danger">Yes, Delete</button>
+                <button onclick="closeModal()" class="btn btn-primary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secret Key Modal -->
+    <div id="secretModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <h3 style="color: #856404;">🔑 Secret Key</h3>
+            <p>Secret key for <strong id="secretTeamName"></strong></p>
+            <div style="background: #fff3cd; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                <code id="secretKeyDisplay" style="font-size: 1.5em; word-break: break-all;"></code>
+            </div>
+            <div class="modal-actions">
+                <button onclick="copySecretKey()" class="btn btn-success">📋 Copy</button>
+                <button onclick="closeSecretModal()" class="btn btn-primary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+        let teams = [];
+        let currentDeleteId = null;
+        let currentSecretKey = '';
+
+        // Load teams immediately when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTeams();
+        });
+
+        function loadTeams() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+            
+            fetch('/api/get-teams')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    
+                    if (data.success) {
+                        teams = data.teams;
+                        updateStats();
+                        displayTeams(teams);
+                    } else {
+                        showToast('Error loading teams: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                    showToast('Error connecting to server', 'error');
+                    console.error('Error:', error);
+                });
+        }
+
+        function updateStats() {
+            const totalTeams = teams.length;
+            document.getElementById('totalTeams').textContent = totalTeams;
+            
+            let totalMembers = 0;
+            teams.forEach(team => {
+                totalMembers += team.members.length;
+            });
+            document.getElementById('totalMembers').textContent = totalMembers;
+            
+            const avgSize = totalTeams > 0 ? (totalMembers / totalTeams).toFixed(1) : 0;
+            document.getElementById('avgTeamSize').textContent = avgSize;
+        }
+
+        function displayTeams(teamsToShow) {
+            const container = document.getElementById('teamsContainer');
+            
+            if (teamsToShow.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">🔍</div>
+                        <h3>No Teams Found</h3>
+                        <p>No teams match your search criteria</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = teamsToShow.map(team => {
+                // Format members list
+                const membersList = team.members.map(member => {
+                    const match = member.match(/(.*?) \((.*?)\)/);
+                    const name = match ? match[1] : member;
+                    const usn = match ? match[2] : '';
+                    return `
+                        <div class="member-item">
+                            <span class="member-name">${name}</span>
+                            <span class="member-usn">${usn}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="team-card" id="team-${team.id}">
+                        <div class="team-header">
+                            <div class="team-title">
+                                <h2>${team.team_name}</h2>
+                                <span class="team-number">${team.team_number}</span>
+                            </div>
+                            <div class="team-actions">
+                                <button class="btn-icon admin-edit" onclick="adminEditTeam('${team.team_number}')" title="Admin Edit (No Secret Key Required)">👑 Admin Edit</button>
+                                <button class="btn-icon edit" onclick="editTeam('${team.team_number}')" title="Normal Edit (Requires Secret Key)">✏️ Edit</button>
+                                <button class="btn-icon delete" onclick="openDeleteModal('${team.id}', '${team.team_name}')" title="Delete Team">🗑️ Delete</button>
+                            </div>
+                        </div>
+                        
+                        <div class="team-info">
+                            <div class="info-item">
+                                <span class="label">Created</span>
+                                <span class="value">${new Date(team.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Members</span>
+                                <span class="value">${team.members.length}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Team ID</span>
+                                <span class="value">#${team.id}</span>
+                            </div>
+                            <div class="info-item secret-key-item">
+                                <span class="label">🔑 Secret Key (Click to view)</span>
+                                <span class="secret-key-display" onclick="showSecretKey('${team.team_number}', '${team.team_name}')">•••••••• (Click to reveal)</span>
+                            </div>
+                        </div>
+
+                        <div class="members-section">
+                            <h3>Team Members</h3>
+                            <div class="members-list">
+                                ${membersList}
+                            </div>
+                        </div>
+
+                        <div class="team-footer">
+                            <span class="secret-badge">🔒 Admin Override Available</span>
+                            <span>Created: ${new Date(team.created_at).toLocaleString()}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterTeams() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filteredTeams = teams.filter(team => {
+                return team.team_name.toLowerCase().includes(searchTerm) ||
+                       team.team_number.toLowerCase().includes(searchTerm) ||
+                       team.members.some(m => m.toLowerCase().includes(searchTerm));
+            });
+            
+            displayTeams(filteredTeams);
+        }
+
+        function refreshTeams() {
+            loadTeams();
+            showToast('Teams refreshed!');
+        }
+
+        function editTeam(teamNumber) {
+            // Normal edit - requires secret key (redirects to normal edit page)
+            window.location.href = `/edit-team/${teamNumber}`;
+        }
+
+        function adminEditTeam(teamNumber) {
+            // Admin edit - no secret key required
+            // You can create a special admin edit page or use the same edit page with admin privileges
+            window.location.href = `/admin-edit-team/${teamNumber}`;
+            showToast('Admin Edit Mode - No Secret Key Required', 'info');
+        }
+
+        function showSecretKey(teamNumber, teamName) {
+            // Fetch team details to get secret key
+            fetch(`/api/get-team/${teamNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        currentSecretKey = data.team.secret_key;
+                        document.getElementById('secretTeamName').textContent = `${teamNumber} - ${teamName}`;
+                        document.getElementById('secretKeyDisplay').textContent = currentSecretKey;
+                        document.getElementById('secretModal').classList.add('show');
+                    } else {
+                        showToast('Error fetching secret key', 'error');
+                    }
+                })
+                .catch(error => {
+                    showToast('Error connecting to server', 'error');
+                });
+        }
+
+        function copySecretKey() {
+            navigator.clipboard.writeText(currentSecretKey).then(() => {
+                showToast('Secret key copied to clipboard!');
+                closeSecretModal();
+            }).catch(() => {
+                showToast('Failed to copy secret key', 'error');
+            });
+        }
+
+        function closeSecretModal() {
+            document.getElementById('secretModal').classList.remove('show');
+        }
+
+        function openDeleteModal(teamId, teamName) {
+            currentDeleteId = teamId;
+            document.getElementById('deleteTeamName').textContent = teamName;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            currentDeleteId = null;
+        }
+
+        function confirmDelete() {
+            if (!currentDeleteId) return;
+
+            fetch(`/api/admin/delete-team/${currentDeleteId}`, {
+                method: 'DELETE',
+            })
+            .then(response => response.json())
+            .then(data => {
+                closeModal();
+                
+                if (data.success) {
+                    showToast('Team deleted successfully!');
+                    loadTeams(); // Reload teams
+                } else {
+                    showToast('Error: ' + data.message, 'error');
+                }
+            })
+            .catch(error => {
+                closeModal();
+                showToast('Error connecting to server', 'error');
+                console.error('Error:', error);
+            });
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = 'toast ' + (type === 'error' ? 'error' : type === 'info' ? 'info' : 'success');
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const deleteModal = document.getElementById('deleteModal');
+            const secretModal = document.getElementById('secretModal');
+            
+            if (event.target === deleteModal) {
+                closeModal();
+            }
+            if (event.target === secretModal) {
+                closeSecretModal();
+            }
+        }
+    </script>
+</body>
+</html>

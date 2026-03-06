@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://uploads.onecompiler.io/42zp5pya9/44fjf3z6v/logo.png">
+    <title>Project Submission - CSE DBMS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg') no-repeat center center fixed;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 10px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-section {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .login-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .team-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            display: none;
+        }
+
+        .team-info.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .info-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .member-list {
+            list-style: none;
+            margin-top: 10px;
+        }
+
+        .member-list li {
+            padding: 8px;
+            background: #f8f9fa;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .upload-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .upload-section.show {
+            display: block;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .upload-area:hover {
+            background: #f0f4ff;
+            border-color: #764ba2;
+        }
+
+        .upload-area.dragover {
+            background: #e8f4fd;
+            border-color: #28a745;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .file-list {
+            margin: 20px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .file-name {
+            font-weight: 500;
+        }
+
+        .file-size {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .remove-file {
+            color: #dc3545;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+        .remove-file:hover {
+            background: #fee;
+            border-radius: 5px;
+        }
+
+        .submission-type {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .type-option {
+            flex: 1;
+            padding: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .type-option.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .type-option input {
+            display: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding: 10px;
+            background: #fee;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 0.9em;
+            margin-top: 10px;
+            padding: 10px;
+            background: #d4edda;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+            display: none;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .submission-type {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📁 Project Submission Portal</h1>
+            <p>Upload your DBMS project files securely</p>
+        </header>
+
+        <div class="main-content">
+            <a href="/" class="back-link">← Back to Home</a>
+
+            <!-- Login Section -->
+            <div class="login-section" id="loginSection">
+                <h2>🔐 Team Login</h2>
+                <div class="form-group">
+                    <label>Team Number</label>
+                    <input type="text" id="teamNumber" class="input-field" placeholder="e.g., TEAM1">
+                </div>
+                <div class="form-group">
+                    <label>Secret Key</label>
+                    <input type="password" id="secretKey" class="input-field" placeholder="Enter your team's secret key">
+                </div>
+                <button onclick="verifyTeam()" class="btn btn-primary">Verify & Continue</button>
+                <div id="loginError" class="error-message"></div>
+                <div id="loginLoading" class="loading">Verifying...</div>
+            </div>
+
+            <!-- Team Info Section -->
+            <div class="team-info" id="teamInfo">
+                <h3>👥 Team Details</h3>
+                <div class="info-card">
+                    <p><strong>Team:</strong> <span id="displayTeamName"></span></p>
+                    <p><strong>Members:</strong></p>
+                    <ul class="member-list" id="memberList"></ul>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section" id="uploadSection">
+                <h3>📤 Upload Project Files</h3>
+                
+                <!-- Submission Type -->
+                <div class="submission-type">
+                    <label class="type-option selected">
+                        <input type="radio" name="submissionType" value="final" checked> 
+                        <strong>Final Submission</strong>
+                        <p style="font-size: 0.9em; color: #666;">Main project submission</p>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="submissionType" value="interim"> 
+                        <strong>Interim Submission</strong>
+                        <p style="font-size: 0.9em; color: #666;">Progress report / Draft</p>
+                    </label>
+                    <label class="type-option">
+                        <input type="radio" name="submissionType" value="supporting"> 
+                        <strong>Supporting Docs</strong>
+                        <p style="font-size: 0.9em; color: #666;">Additional documents</p>
+                    </label>
+                </div>
+
+                <!-- Upload Area -->
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                    <div class="upload-icon">📁</div>
+                    <h3>Click or Drag files here</h3>
+                    <p>Supported: ZIP, RAR, PDF, DOC, DOCX, PPT, PPTX, PY, IPYNB, SQL, CSV, TXT (Max 100MB)</p>
+                    <input type="file" id="fileInput" multiple style="display: none;" onchange="handleFiles(this.files)">
+                </div>
+
+                <!-- File List -->
+                <div class="file-list" id="fileList"></div>
+
+                <!-- Progress Bar -->
+                <div class="progress-bar" id="progressBar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <!-- Upload Button -->
+                <button onclick="uploadFiles()" class="btn btn-success" id="uploadBtn" disabled>Upload Files</button>
+                <div id="uploadError" class="error-message"></div>
+                <div id="uploadSuccess" class="success-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedFiles = [];
+        let currentTeamNumber = '';
+        let currentSecretKey = '';
+
+        // Drag and drop functionality
+        const uploadArea = document.getElementById('uploadArea');
+        
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        function handleFiles(files) {
+            for (let file of files) {
+                // Check file size (100MB limit)
+                if (file.size > 100 * 1024 * 1024) {
+                    showUploadError(`File ${file.name} exceeds 100MB limit`);
+                    continue;
+                }
+                selectedFiles.push(file);
+            }
+            updateFileList();
+        }
+
+        function updateFileList() {
+            const fileList = document.getElementById('fileList');
+            const uploadBtn = document.getElementById('uploadBtn');
+            
+            if (selectedFiles.length > 0) {
+                fileList.innerHTML = '<h4>Selected Files:</h4>';
+                selectedFiles.forEach((file, index) => {
+                    const size = (file.size / 1024).toFixed(2) + ' KB';
+                    fileList.innerHTML += `
+                        <div class="file-item">
+                            <span class="file-name">${file.name}</span>
+                            <span class="file-size">${size}</span>
+                            <span class="remove-file" onclick="removeFile(${index})">❌</span>
+                        </div>
+                    `;
+                });
+                uploadBtn.disabled = false;
+            } else {
+                fileList.innerHTML = '';
+                uploadBtn.disabled = true;
+            }
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            updateFileList();
+        }
+
+        function verifyTeam() {
+            const teamNumber = document.getElementById('teamNumber').value.trim();
+            const secretKey = document.getElementById('secretKey').value;
+            const loginError = document.getElementById('loginError');
+            const loginLoading = document.getElementById('loginLoading');
+
+            if (!teamNumber || !secretKey) {
+                loginError.style.display = 'block';
+                loginError.textContent = 'Please enter both team number and secret key';
+                return;
+            }
+
+            loginLoading.classList.add('show');
+            loginError.style.display = 'none';
+
+            fetch('/api/verify-team-for-submission', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    team_number: teamNumber,
+                    secret_key: secretKey
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                loginLoading.classList.remove('show');
+                
+                if (data.success) {
+                    currentTeamNumber = teamNumber;
+                    currentSecretKey = secretKey;
+                    
+                    // Show team info
+                    document.getElementById('displayTeamName').textContent = 
+                        `${teamNumber} - ${data.team_name}`;
+                    
+                    const memberList = document.getElementById('memberList');
+                    memberList.innerHTML = '';
+                    data.members.forEach(member => {
+                        memberList.innerHTML += `
+                            <li>
+                                <span>${member.name}</span>
+                                <span style="color: #667eea;">${member.usn}</span>
+                            </li>
+                        `;
+                    });
+
+                    // Show sections
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('teamInfo').classList.add('show');
+                    document.getElementById('uploadSection').classList.add('show');
+                    
+                    showSuccess('Team verified successfully!');
+                } else {
+                    loginError.style.display = 'block';
+                    loginError.textContent = data.message;
+                }
+            })
+            .catch(error => {
+                loginLoading.classList.remove('show');
+                loginError.style.display = 'block';
+                loginError.textContent = 'Error connecting to server';
+            });
+        }
+
+        function uploadFiles() {
+            if (selectedFiles.length === 0) {
+                showUploadError('Please select files to upload');
+                return;
+            }
+
+            const submissionType = document.querySelector('input[name="submissionType"]:checked').value;
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const uploadBtn = document.getElementById('uploadBtn');
+
+            progressBar.style.display = 'block';
+            uploadBtn.disabled = true;
+
+            const formData = new FormData();
+            selectedFiles.forEach(file => {
+                formData.append('files', file);
+            });
+            formData.append('team_number', currentTeamNumber);
+            formData.append('secret_key', currentSecretKey);
+            formData.append('submission_type', submissionType);
+
+            // Simulate progress
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressFill.style.width = progress + '%';
+                if (progress >= 90) clearInterval(interval);
+            }, 300);
+
+            // Simulate upload success (since we don't have the actual upload endpoint yet)
+            setTimeout(() => {
+                clearInterval(interval);
+                progressFill.style.width = '100%';
+                
+                setTimeout(() => {
+                    progressBar.style.display = 'none';
+                    progressFill.style.width = '0%';
+                    uploadBtn.disabled = false;
+                    
+                    showSuccess('Files uploaded successfully!');
+                    selectedFiles = [];
+                    updateFileList();
+                }, 1000);
+            }, 3000);
+        }
+
+        function showUploadError(message) {
+            const error = document.getElementById('uploadError');
+            error.style.display = 'block';
+            error.textContent = message;
+            setTimeout(() => {
+                error.style.display = 'none';
+            }, 3000);
+        }
+
+        function showSuccess(message) {
+            const success = document.getElementById('uploadSuccess');
+            success.style.display = 'block';
+            success.textContent = message;
+            setTimeout(() => {
+                success.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

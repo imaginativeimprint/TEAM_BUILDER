@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            padding-top: 50px;
+        }
+
+        /* The main white container like in your image */
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            width: 350px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+        }
+
+        .team-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .team-info {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 20px;
+        }
+
+        /* Simple table styling without heavy headers */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px 0;
+            font-size: 0.95rem;
+            color: #444;
+            border-bottom: 1px solid #f0f0f0; /* Soft horizontal line */
+        }
+
+        /* Removing border from the last student */
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sl-no {
+            width: 30px;
+            color: #888;
+            font-weight: bold;
+        }
+
+        .usn {
+            color: #666;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="team-card">
+    <div class="team-title">TEAM1 - TechnoForge</div>
+    <div class="team-info">Members (4):</div>
+
+    <table>
+        <tr>
+            <td class="sl-no">1.</td>
+            <td>Priti Ranjan <span class="usn">(1EW24CS131)</span></td>
+        </tr>
+        <tr>
+            <td class="sl-no">2.</td>
+            <td>Rahul M V <span class="usn">(1EW24CS137)</span></td>
+        </tr>
+        <tr>
+            <td class="sl-no">3.</td>
+            <td>S Mahamad Jaish <span class="usn">(1EW24CS156)</span></td>
+        </tr>
+        <tr>
+            <td class="sl-no">4.</td>
+            <td>Shashank P <span class="usn">(1EW24CS172)</span></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://uploads.onecompiler.io/42zp5pya9/44fjf3z6v/logo.png">
+    <title>Create Team - Team Formation Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg') no-repeat center center fixed;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 15px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-link:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateX(-5px);
+        }
+
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .members-section {
+            background: #f9f9f9;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 25px 0;
+        }
+
+        .members-section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .member-entry {
+            margin-bottom: 15px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .member-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .member-row .usn-input {
+            flex: 0 0 150px;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .member-row .usn-input:disabled {
+            background: #f5f5f5;
+            color: #333;
+            border-color: #28a745;
+        }
+
+        .member-row .usn-input.error {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .member-details {
+            flex: 1;
+            padding: 10px;
+            background: #e8f4fd;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .member-details.error {
+            background: #fee;
+            color: #dc3545;
+        }
+
+        .member-details.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: #e0e0e0;
+        }
+
+        .btn-secondary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-remove {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .btn-remove:hover {
+            background: #fee;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 5px;
+            padding: 10px;
+            background: #fee;
+            border-radius: 5px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .warning-message {
+            color: #856404;
+            font-size: 0.9em;
+            margin-top: 5px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 5px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-message {
+            color: #155724;
+            font-size: 0.9em;
+            margin-top: 5px;
+            padding: 10px;
+            background: #d4edda;
+            border-radius: 5px;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .member-count {
+            text-align: right;
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .member-count span {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .member-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .member-row .usn-input {
+                flex: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Create New Team</h1>
+            <a href="/" class="back-link">← Back to Home</a>
+        </header>
+
+        <div class="form-container">
+            <form id="teamForm" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="teamName">Team Name:</label>
+                    <input type="text" id="teamName" required class="input-field" placeholder="Enter team name (e.g., DBMS_Project_Team)">
+                </div>
+
+                <div class="form-group">
+                    <label for="secretKey">Secret Key:</label>
+                    <input type="password" id="secretKey" required class="input-field" placeholder="Create a secret key for editing">
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="member-count">
+                    Members: <span id="memberCount">0</span>/4 (Minimum 3 required)
+                </div>
+
+                <div class="members-section">
+                    <h3>Team Members</h3>
+                    <div id="membersList"></div>
+                    <button type="button" onclick="addMember()" class="btn btn-secondary" id="addMemberBtn">➕ Add Member</button>
+                    
+                    <div id="globalError" class="error-message"></div>
+                    <div id="globalWarning" class="warning-message"></div>
+                    <div id="globalSuccess" class="success-message"></div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" onclick="submitTeam()" class="btn btn-primary" id="submitBtn">Create Team</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let memberCount = 0;
+        const memberData = new Map();
+        let validationErrors = new Map();
+
+        function updateProgress() {
+            const progressFill = document.getElementById('progressFill');
+            const memberCountSpan = document.getElementById('memberCount');
+            const addMemberBtn = document.getElementById('addMemberBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            memberCountSpan.textContent = memberData.size;
+            
+            let percentage = (memberData.size / 4) * 100;
+            progressFill.style.width = percentage + '%';
+            
+            // Change color based on progress
+            if (memberData.size >= 3) {
+                progressFill.style.background = 'linear-gradient(90deg, #28a745, #20c997)';
+                submitBtn.disabled = false;
+            } else {
+                progressFill.style.background = 'linear-gradient(90deg, #667eea, #764ba2)';
+                submitBtn.disabled = true;
+            }
+            
+            // Disable add member button if we have 4 members
+            addMemberBtn.disabled = memberData.size >= 4;
+        }
+
+        function addMember(lastThree = '', name = '', usn = '') {
+            if (memberCount >= 4) {
+                showWarning('Maximum 4 members allowed');
+                return;
+            }
+            
+            memberCount++;
+            const membersList = document.getElementById('membersList');
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'member-entry';
+            memberDiv.id = `member-${memberCount}`;
+            
+            memberDiv.innerHTML = `
+                <div class="member-row">
+                    <input type="text" placeholder="Enter last 3 digits of USN" 
+                           onchange="fetchStudentDetails(this, ${memberCount})" 
+                           class="usn-input" id="usn-${memberCount}" 
+                           value="${lastThree}" ${usn ? 'disabled' : ''}>
+                    <span class="member-details" id="details-${memberCount}">
+                        ${name ? `${name} (${usn})` : ''}
+                    </span>
+                    <button type="button" onclick="removeMember(${memberCount})" class="btn-remove">❌</button>
+                </div>
+            `;
+            
+            membersList.appendChild(memberDiv);
+            
+            if (usn) {
+                memberData.set(memberCount, {
+                    usn: usn,
+                    name: name,
+                    lastThree: lastThree
+                });
+                updateProgress();
+            }
+        }
+
+        function showError(message, memberId = null) {
+            if (memberId) {
+                const detailsSpan = document.getElementById(`details-${memberId}`);
+                const input = document.getElementById(`usn-${memberId}`);
+                detailsSpan.className = 'member-details error';
+                detailsSpan.innerHTML = `❌ ${message}`;
+                input.classList.add('error');
+            } else {
+                const globalError = document.getElementById('globalError');
+                globalError.style.display = 'block';
+                globalError.textContent = message;
+                
+                setTimeout(() => {
+                    globalError.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function showWarning(message) {
+            const globalWarning = document.getElementById('globalWarning');
+            globalWarning.style.display = 'block';
+            globalWarning.textContent = message;
+            
+            setTimeout(() => {
+                globalWarning.style.display = 'none';
+            }, 3000);
+        }
+
+        function showSuccess(message) {
+            const globalSuccess = document.getElementById('globalSuccess');
+            globalSuccess.style.display = 'block';
+            globalSuccess.textContent = message;
+            
+            setTimeout(() => {
+                globalSuccess.style.display = 'none';
+            }, 3000);
+        }
+
+        function checkForDuplicates(usn, currentMemberId) {
+            for (let [memberId, data] of memberData) {
+                if (memberId !== currentMemberId && data.usn === usn) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function fetchStudentDetails(input, memberId) {
+            const lastThree = input.value.trim().toUpperCase();
+            
+            // Validate input
+            if (lastThree.length !== 3 || !/^\d+$/.test(lastThree)) {
+                showError('Please enter valid 3 digits', memberId);
+                input.value = '';
+                return;
+            }
+
+            // Clear previous data
+            if (memberData.has(memberId)) {
+                memberData.delete(memberId);
+            }
+
+            // Show loading state
+            const detailsSpan = document.getElementById(`details-${memberId}`);
+            detailsSpan.innerHTML = '⏳ Checking...';
+            detailsSpan.className = 'member-details';
+
+            fetch(`/api/get-student/${lastThree}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Check for duplicates within the team
+                        if (checkForDuplicates(data.usn, memberId)) {
+                            showError('❌ Student already added to this team!', memberId);
+                            input.value = '';
+                            input.classList.remove('error');
+                            return;
+                        }
+                        
+                        // Store member data
+                        memberData.set(memberId, {
+                            usn: data.usn,
+                            name: data.name,
+                            lastThree: lastThree
+                        });
+                        
+                        detailsSpan.innerHTML = `✅ ${data.name} (${data.usn})`;
+                        detailsSpan.className = 'member-details';
+                        input.disabled = true;
+                        input.classList.remove('error');
+                        
+                        updateProgress();
+                        showSuccess(`${data.name} added successfully!`);
+                    } else {
+                        // Student not found or already in another team
+                        showError(`❌ ${data.message}`, memberId);
+                        input.value = '';
+                        input.classList.add('error');
+                    }
+                })
+                .catch(error => {
+                    showError('❌ Error connecting to server', memberId);
+                    input.value = '';
+                });
+        }
+
+        function removeMember(memberId) {
+            const memberDiv = document.getElementById(`member-${memberId}`);
+            
+            if (memberData.has(memberId)) {
+                const member = memberData.get(memberId);
+                memberData.delete(memberId);
+                showWarning(`${member.name} removed from team`);
+            }
+            
+            memberDiv.remove();
+            memberCount--;
+            updateProgress();
+        }
+
+        function validateTeam() {
+            if (memberData.size < 3) {
+                showError('Team must have at least 3 members');
+                return false;
+            }
+            
+            // Double-check for duplicates
+            const usns = Array.from(memberData.values()).map(m => m.usn);
+            if (new Set(usns).size !== usns.length) {
+                showError('Duplicate members found! Please check your team.');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function submitTeam() {
+            const teamName = document.getElementById('teamName').value.trim();
+            const secretKey = document.getElementById('secretKey').value;
+            
+            if (!teamName) {
+                showError('Please enter a team name');
+                return;
+            }
+            
+            if (!secretKey) {
+                showError('Please enter a secret key');
+                return;
+            }
+            
+            if (!validateTeam()) {
+                return;
+            }
+
+            // Disable submit button to prevent double submission
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating...';
+
+            const members = Array.from(memberData.values()).map(data => ({
+                usn: data.usn,
+                name: data.name,
+                last_three: data.lastThree
+            }));
+
+            fetch('/api/save-team', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    team_name: teamName,
+                    secret_key: secretKey,
+                    members: members
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showSuccess(`✅ Team created successfully! Team number: ${data.team_number}`);
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    showError('❌ ' + data.message);
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Create Team';
+                }
+            })
+            .catch(error => {
+                showError('❌ Error connecting to server');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Team';
+            });
+        }
+
+        // Add first member by default
+        window.onload = function() {
+            addMember();
+            updateProgress();
+        };
+    </script>
+</body>
+</html>

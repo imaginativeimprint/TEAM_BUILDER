@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://uploads.onecompiler.io/42zp5pya9/44fjf3z6v/logo.png">
+    <title>Team Formation Portal - CSE DBMS Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg') no-repeat center center fixed;
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .back-to-home {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #backToHomeBtn {
+            display: none;
+            transition: all 0.3s;
+            padding: 8px 20px;
+            font-size: 0.9em;
+        }
+
+        #backToHomeBtn:hover {
+            transform: translateX(-5px);
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .card-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-field {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .password-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        /* Beautiful Team Cards - New Style */
+        .teams-list {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .teams-list h2 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .teams-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .team-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+        }
+
+        .team-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .team-info {
+            font-size: 0.85rem;
+            color: #777;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .team-badge {
+            background: #e8f4fd;
+            color: #667eea;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td {
+            padding: 10px 0;
+            font-size: 0.95rem;
+            color: #444;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sl-no {
+            width: 30px;
+            color: #888;
+            font-weight: bold;
+        }
+
+        .member-name {
+            font-weight: 500;
+        }
+
+        .usn {
+            color: #667eea;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-left: 5px;
+        }
+
+        .team-footer {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #e0e0e0;
+            font-size: 0.8rem;
+            color: #999;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success-message {
+            color: #28a745;
+            font-size: 0.9em;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .footer-section p {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+            color: #ccc;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-section ul li span {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .guide-steps {
+            counter-reset: step-counter;
+        }
+
+        .guide-steps li {
+            counter-increment: step-counter;
+            margin-bottom: 15px;
+            position: relative;
+            padding-left: 35px;
+        }
+
+        .guide-steps li:before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid #444;
+            color: #888;
+            font-size: 0.9em;
+        }
+
+        .creator-tag {
+            color: #667eea;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.2);
+            color: #667eea;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .teams-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>CSE3 DBMS Team Formation Portal</h1>
+            <p>Create and manage DBMS project teams</p>
+        </header>
+
+        <div class="main-content">
+            <!-- Back button for teams view -->
+            <div class="back-to-home">
+                <button id="backToHomeBtn" onclick="closeTeams()" class="btn btn-secondary">← Back to Home</button>
+                <div></div>
+            </div>
+
+            <div class="card-container">
+                <!-- Create Team Card -->
+                <div class="card">
+                    <div class="card-icon">➕</div>
+                    <h2>Create New Team</h2>
+                    <p>Form a new team with 3-4 members for your DBMS project</p>
+                    <a href="/create-team" class="btn btn-primary">Create Team</a>
+                </div>
+
+                <!-- View Teams Card -->
+                <div class="card">
+                    <div class="card-icon">👥</div>
+                    <h2>View All Teams</h2>
+                    <p>See all formed teams and their members</p>
+                    <button onclick="viewTeams()" class="btn btn-secondary">View Teams</button>
+                </div>
+
+                <!-- Edit Team Card -->
+                <div class="card">
+                    <div class="card-icon">✏️</div>
+                    <h2>Edit Team</h2>
+                    <p>Modify existing team with your secret key</p>
+                    <div class="edit-form">
+                        <input type="text" id="editTeamNumber" placeholder="Enter Team Number (e.g., TEAM1)" class="input-field">
+                        <button onclick="openEditModal()" class="btn btn-secondary">Edit Team</button>
+                    </div>
+                    <div id="editError" class="error-message"></div>
+                </div>
+
+                <!-- Admin Card -->
+                <div class="card">
+                    <div class="card-icon">⚙️</div>
+                    <h2>Admin Panel</h2>
+                    <p>View CSV data and manage teams (Owner only)</p>
+                    <button onclick="openAdminModal()" class="btn btn-danger">Admin Access</button>
+                </div>
+
+                <!-- Project Submission Card -->
+                <div class="card">
+                    <div class="card-icon">📤</div>
+                    <h2>Project Submission</h2>
+                    <p>Upload your DBMS project files using team secret key</p>
+                    <p style="color: #ff9800; font-size: 0.9em; margin-top: 10px;">⚠️ Coming Soon!</p>
+                </div>
+            </div>
+
+            <!-- Teams List Display - Beautiful Cards -->
+            <div id="teamsList" class="teams-list">
+                <h2>📋 All Teams</h2>
+                <div id="teamsContainer" class="teams-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Team Secret Key Modal -->
+    <div id="editModal" class="password-modal">
+        <div class="modal-content">
+            <h3>🔑 Enter Secret Key</h3>
+            <p>Please enter the secret key for team <strong id="editTeamNameDisplay"></strong></p>
+            <input type="password" id="editSecretKey" class="input-field" placeholder="Enter secret key" style="width: 100%; margin-bottom: 15px;">
+            <div id="modalEditError" class="error-message" style="display: none;"></div>
+            <div class="modal-actions">
+                <button onclick="verifyAndEdit()" class="btn btn-primary">Verify & Edit</button>
+                <button onclick="closeEditModal()" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Password Modal -->
+    <div id="adminModal" class="password-modal">
+        <div class="modal-content">
+            <h3>🔒 Admin Access</h3>
+            <p>Enter owner password to access admin panel</p>
+            <input type="password" id="adminPassword" class="input-field" placeholder="Enter admin password" style="width: 100%; margin-bottom: 15px;">
+            <div id="modalAdminError" class="error-message" style="display: none;"></div>
+            <div class="modal-actions">
+                <button onclick="verifyAdmin()" class="btn btn-danger">Access Admin</button>
+                <button onclick="closeAdminModal()" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <!-- About Section -->
+            <div class="footer-section">
+                <h3>📌 About</h3>
+                <p>CSE DBMS Team Formation Portal is designed to help form and manage their project teams efficiently.</p>
+                <p><span class="creator-tag">Created by: Shashank P</span></p>
+                <p><span class="feature-badge">Version 2.0</span> <span class="feature-badge">DBMS Project</span></p>
+            </div>
+
+            <!-- User Guide Section -->
+            <div class="footer-section">
+                <h3>📖 User Guide</h3>
+                <ul class="guide-steps">
+                    <li><strong>Create Team:</strong> Click "Create Team", enter team name and secret key</li>
+                    <li><strong>Add Members:</strong> Enter last 3 digits of USN to auto-fill details</li>
+                    <li><strong>Team Size:</strong> Must have 3-4 members</li>
+                    <li><strong>Edit Team:</strong> Enter team number and secret key to modify</li>
+                    <li><strong>Secret Key:</strong> Keep it safe - you'll need it to edit your team</li>
+                    <li><strong>View Teams:</strong> Click "View Teams" to see all formed teams</li>
+                </ul>
+            </div>
+
+            <!-- Quick Tips Section -->
+            <div class="footer-section">
+                <h3>💡 Quick Tips</h3>
+                <ul>
+                    <li><span>✓</span> USN format: Enter only last 3 digits (e.g., 167)</li>
+                    <li><span>✓</span> Team numbers auto-generate as TEAM1, TEAM2, etc.</li>
+                    <li><span>✓</span> Students cannot be in multiple teams</li>
+                    <li><span>✓</span> Save your secret key for future edits</li>
+                    <li><span>✓</span> Contact owner for admin access</li>
+                </ul>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="footer-section">
+                <h3>📞 Contact</h3>
+                <ul>
+                    <li><span>👤</span> Owner: Shashank P</li>
+                    <li><span>📧</span> Email: shashank.pp14@gmail.com</li>
+                    <li><span>🆔</span> USN: 1EW24CS172</li>
+                    <li><span>🔧</span> For admin access, contact owner</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 CSE DBMS Team Formation Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentEditTeam = null;
+
+        // View Teams Function - Opens teams view and hides main cards
+        function viewTeams() {
+            // Hide the main card container
+            document.querySelector('.card-container').style.display = 'none';
+            
+            // Show teams list
+            document.getElementById('teamsList').style.display = 'block';
+            
+            // Show back button
+            document.getElementById('backToHomeBtn').style.display = 'inline-block';
+            
+            // Load teams
+            fetch('/api/get-teams')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const container = document.getElementById('teamsContainer');
+                        container.innerHTML = '';
+                        
+                        if (data.teams.length === 0) {
+                            container.innerHTML = '<p style="text-align: center; color: #666; padding: 50px; grid-column: 1/-1;">No teams created yet.</p>';
+                            return;
+                        }
+                        
+                        data.teams.forEach((team, index) => {
+                            const teamCard = document.createElement('div');
+                            teamCard.className = 'team-card';
+                            
+                            // Format members list
+                            let membersHtml = '';
+                            team.members.forEach((member, idx) => {
+                                const match = member.match(/(.*?) \((.*?)\)/);
+                                const name = match ? match[1] : member;
+                                const usn = match ? match[2] : '';
+                                membersHtml += `
+                                    <tr>
+                                        <td class="sl-no">${idx + 1}.</td>
+                                        <td>
+                                            <span class="member-name">${name}</span>
+                                            <span class="usn">${usn}</span>
+                                        </td>
+                                    </tr>
+                                `;
+                            });
+                            
+                            teamCard.innerHTML = `
+                                <div class="team-title">${team.team_number} - ${team.team_name}</div>
+                                <div class="team-info">
+                                    <span>Members (${team.members.length}):</span>
+                                    <span class="team-badge">ID: ${team.id}</span>
+                                </div>
+                                <table>
+                                    ${membersHtml}
+                                </table>
+                                <div class="team-footer">
+                                    <span>📅 ${new Date(team.created_at).toLocaleDateString()}</span>
+                                    <span>🕐 ${new Date(team.created_at).toLocaleTimeString()}</span>
+                                </div>
+                            `;
+                            container.appendChild(teamCard);
+                        });
+                    } else {
+                        alert('Error loading teams: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    alert('Error connecting to server');
+                });
+        }
+
+        // Close teams view and show main cards
+        function closeTeams() {
+            // Show main card container
+            document.querySelector('.card-container').style.display = 'grid';
+            
+            // Hide teams list
+            document.getElementById('teamsList').style.display = 'none';
+            
+            // Hide back button
+            document.getElementById('backToHomeBtn').style.display = 'none';
+            
+            // Clear teams container
+            document.getElementById('teamsContainer').innerHTML = '';
+        }
+
+        // Edit Team Functions
+        function openEditModal() {
+            const teamNumber = document.getElementById('editTeamNumber').value.trim();
+            const editError = document.getElementById('editError');
+            
+            if (!teamNumber) {
+                editError.style.display = 'block';
+                editError.textContent = 'Please enter a team number';
+                setTimeout(() => {
+                    editError.style.display = 'none';
+                }, 3000);
+                return;
+            }
+            
+            fetch(`/api/get-team/${teamNumber}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        currentEditTeam = teamNumber;
+                        document.getElementById('editTeamNameDisplay').textContent = 
+                            `${data.team.team_number} - ${data.team.team_name}`;
+                        document.getElementById('editModal').classList.add('show');
+                        document.getElementById('editSecretKey').value = '';
+                        document.getElementById('modalEditError').style.display = 'none';
+                    } else {
+                        editError.style.display = 'block';
+                        editError.textContent = 'Team not found!';
+                        setTimeout(() => {
+                            editError.style.display = 'none';
+                        }, 3000);
+                    }
+                })
+                .catch(error => {
+                    editError.style.display = 'block';
+                    editError.textContent = 'Error connecting to server';
+                    setTimeout(() => {
+                        editError.style.display = 'none';
+                    }, 3000);
+                });
+        }
+
+        function verifyAndEdit() {
+            const secretKey = document.getElementById('editSecretKey').value;
+            const modalError = document.getElementById('modalEditError');
+            
+            if (!secretKey) {
+                modalError.style.display = 'block';
+                modalError.textContent = 'Please enter the secret key';
+                return;
+            }
+            
+            fetch(`/api/get-team/${currentEditTeam}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.team.secret_key === secretKey) {
+                            window.location.href = `/edit-team/${currentEditTeam}`;
+                        } else {
+                            modalError.style.display = 'block';
+                            modalError.textContent = 'Invalid secret key!';
+                        }
+                    } else {
+                        modalError.style.display = 'block';
+                        modalError.textContent = 'Error verifying team';
+                    }
+                })
+                .catch(error => {
+                    modalError.style.display = 'block';
+                    modalError.textContent = 'Error connecting to server';
+                });
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+            currentEditTeam = null;
+        }
+
+        // Admin Functions
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('show');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('modalAdminError').style.display = 'none';
+        }
+
+        function verifyAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            const modalError = document.getElementById('modalAdminError');
+            
+            if (password === 'Shashank572120') {
+                window.location.href = '/admin';
+            } else {
+                modalError.style.display = 'block';
+                modalError.textContent = 'Invalid admin password!';
+            }
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('show');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const editModal = document.getElementById('editModal');
+            const adminModal = document.getElementById('adminModal');
+            
+            if (event.target === editModal) {
+                closeEditModal();
+            }
+            if (event.target === adminModal) {
+                closeAdminModal();
+            }
+        }
+
+        // Handle Enter key in modals
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                if (document.getElementById('editModal').classList.contains('show')) {
+                    verifyAndEdit();
+                } else if (document.getElementById('adminModal').classList.contains('show')) {
+                    verifyAdmin();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
