@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ["php82", "php82Extensions.mysql"]
-
-[phases.install]
-cmds = ["apt-get update", "apt-get install -y php8.2-mysql"]
-
-[start]
-cmd = "php -S 0.0.0.0:$PORT -t ."
