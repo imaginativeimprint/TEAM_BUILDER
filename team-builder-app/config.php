@@ -1,0 +1,118 @@
+<?php
+// Database configuration - DYNAMIC for cloud deployment
+if (getenv('DATABASE_URL')) {
+    // For platforms like Heroku, Railway that provide DATABASE_URL
+    $db_url = parse_url(getenv('DATABASE_URL'));
+    define('DB_HOST', $db_url['host'] ?? 'localhost');
+    define('DB_USER', $db_url['user'] ?? 'root');
+    define('DB_PASS', $db_url['pass'] ?? '');
+    define('DB_NAME', ltrim($db_url['path'] ?? 'team_builder', '/'));
+} else {
+    // Default values (will be overridden by platform environment variables)
+    define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+    define('DB_USER', getenv('DB_USER') ?: 'root');
+    define('DB_PASS', getenv('DB_PASSWORD') ?: '');
+    define('DB_NAME', getenv('DB_NAME') ?: 'team_builder');
+}
+
+// CSV file path
+define('CSV_FILE', __DIR__ . '/students.csv');
+
+// Create database connection function
+function getDB() {
+    try {
+        $pdo = new PDO(
+            "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+            DB_USER,
+            DB_PASS,
+            [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                PDO::ATTR_EMULATE_PREPARES => false
+            ]
+        );
+        return $pdo;
+    } catch (PDOException $e) {
+        // Return error as JSON for API calls
+        header('Content-Type: application/json');
+        die(json_encode(['success' => false, 'message' => 'Database connection failed: ' . $e->getMessage()]));
+    }
+}
+
+// Initialize CSV file with student data
+function initCSV() {
+    if (!file_exists(CSV_FILE)) {
+        $students = [
+            ['1EW24CS167', 'Shamanth Kanale'],
+            ['1EW24CS153', 'Rohith R'],
+            ['1EW24CS154', 'Rohitha Santhosha Gobbani'],
+            ['1EW24CS148', 'Rakshitha'],
+            ['1EW24CS136', 'Rachana C R'],
+            ['1EW24CS157', 'Sachin Gothe'],
+            ['1EW24CS130', 'Preethi N'],
+            ['1EW24CS158', 'Sagar V'],
+            ['1EW24CS132', 'Priyanka P'],
+            ['1EW24CS134', 'Punyashree Urs K H'],
+            ['1EW24CS135', 'Punyashree V'],
+            ['1EW24CS138', 'Rahul Ramesh'],
+            ['1EW24CS143', 'Rajeshwari B S'],
+            ['1EW24CS144', 'Raksha B gowda'],
+            ['1EW24CS160', 'Sanjana'],
+            ['1EW24CS173', 'Shashikala S'],
+            ['1EW24CS162', 'Santoshi Panchal'],
+            ['1EW24CS166', 'Shamanth K Gowda'],
+            ['1EW24CS171', 'Shashank G P'],
+            ['1EW24CS137', 'Rahul M V'],
+            ['1EW24CS140', 'Rajath A Shetty'],
+            ['1EW24CS145', 'Rakshitha'],
+            ['1EW24CS164', 'Seema'],
+            ['1EW24CS172', 'Shashank P'],
+            ['1EW24CS178', 'Shobitha'],
+            ['1EW24CS159', 'Samana Manjunath'],
+            ['1EW24CS131', 'Priti Ranjan'],
+            ['1EW24CS190', 'spoorthi'],
+            ['1EW24CS149', 'Rangalakshmi H G'],
+            ['1EW24CS186', 'sinchana B N'],
+            ['1EW24CS179', 'sridevi'],
+            ['1EW24CS174', 'Sheela.s'],
+            ['1EW24CS183', 'Shruthi Y'],
+            ['1EW24CS184', 'Shuchita M N'],
+            ['1EW24CS188', 'Sneha'],
+            ['1EW24CS156', 'S Mahamad Jaish'],
+            ['1EW24CS177', 'Shivaraj'],
+            ['1EW24CS175', 'Shivaling'],
+            ['1EW24CS163', 'Satish'],
+            ['1EW24CS146', 'Rakshith M'],
+            ['1EW24CS133', 'Punith Raje Urs K.H'],
+            ['1EW24CS142', 'Rajesh D'],
+            ['1EW24CS139', 'Rahul Ramesh'],
+            ['1EW24CS189', 'Sneha MS'],
+            ['1EW24CS185', 'Sinchana AH'],
+            ['1EW24CS191', 'Sridevi S'],
+            ['1EW24CS152', 'Reshma'],
+            ['1EW24CS141', 'Rajeev Narayan'],
+            ['1EW24CS150', 'Rashmi'],
+            ['1EW24CS165', 'Shalini'],
+            ['1EW24CS147', 'Rakshitha'],
+            ['1EW24CS180', 'Shreya'],
+            ['1EW24CS168', 'sharan. k'],
+            ['1EW24CS155', 'Rushanth r ambore'],
+            ['1EW24CS170', 'sharath pande mr'],
+            ['1EW24CS151', 'Rayan omran'],
+            ['1EW24CS192', 'Srinivas Gowda S D'],
+            ['1EW24CS182', 'Shrujan S'],
+            ['1EW24CS169', 'Sharath M N'],
+            ['1EW24CS176', 'Shivalinga S']
+        ];
+        
+        $fp = fopen(CSV_FILE, 'w');
+        foreach ($students as $student) {
+            fputcsv($fp, $student);
+        }
+        fclose($fp);
+    }
+}
+
+// Initialize CSV on file load
+initCSV();
+?>
