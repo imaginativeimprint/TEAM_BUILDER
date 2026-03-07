@@ -5,6 +5,7 @@ import os
 import sqlite3
 from datetime import datetime
 import socket
+import tempfile
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Change this in production
@@ -190,14 +191,18 @@ def save_team():
     secret_key = data.get('secret_key')
     members = data.get('members')
     
+    # Validate inputs
+    if not team_name or not secret_key or not members:
+        return jsonify({'success': False, 'message': 'Missing required fields'})
+    
     # Validate team has 3-4 members
     if len(members) < 3 or len(members) > 4:
         return jsonify({'success': False, 'message': 'Team must have 3-4 members'})
     
-    # Check for duplicate USNs
+    # Check for duplicate USNs within the team
     usns = [m['usn'] for m in members]
     if len(usns) != len(set(usns)):
-        return jsonify({'success': False, 'message': 'Duplicate members not allowed'})
+        return jsonify({'success': False, 'message': 'Duplicate members not allowed in the same team'})
     
     # Check if any member is already in another team
     for member in members:
@@ -244,6 +249,9 @@ def save_team():
             'message': 'Team created successfully',
             'team_number': team_number
         })
+    except sqlite3.IntegrityError as e:
+        db.rollback()
+        return jsonify({'success': False, 'message': 'Database integrity error: ' + str(e)})
     except Exception as e:
         db.rollback()
         return jsonify({'success': False, 'message': str(e)})
@@ -257,7 +265,8 @@ def get_teams():
     
     try:
         cursor.execute("""
-            SELECT t.*, GROUP_CONCAT(tm.name || ' (' || tm.usn || ')') as members_list 
+            SELECT t.id, t.team_name, t.team_number, t.created_at,
+                   GROUP_CONCAT(tm.name || ' (' || tm.usn || ')') as members_list 
             FROM teams t 
             LEFT JOIN team_members tm ON t.id = tm.team_id 
             GROUP BY t.id
@@ -268,12 +277,13 @@ def get_teams():
         
         teams_list = []
         for team in teams:
+            members = team[4].split(',') if team[4] else []
             teams_list.append({
                 'id': team[0],
                 'team_name': team[1],
                 'team_number': team[2],
-                'created_at': team[4],
-                'members': team[5].split(',') if team[5] else []
+                'created_at': team[3],
+                'members': members
             })
         
         return jsonify({'success': True, 'teams': teams_list})
@@ -306,6 +316,14 @@ def get_team(team_number):
         cursor.execute("SELECT usn, name, last_three FROM team_members WHERE team_id = ?", (team[0],))
         members = cursor.fetchall()
         
+        member_list = []
+        for m in members:
+            member_list.append({
+                'usn': m[0],
+                'name': m[1],
+                'last_three': m[2]
+            })
+        
         return jsonify({
             'success': True,
             'team': {
@@ -315,7 +333,7 @@ def get_team(team_number):
                 'secret_key': team[3],
                 'created_at': team[4]
             },
-            'members': [{'usn': m[0], 'name': m[1], 'last_three': m[2]} for m in members]
+            'members': member_list
         })
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
@@ -793,16 +811,13 @@ def view_csv():
         return f"Error: {str(e)}"
     finally:
         db.close()
+
 @app.route('/download-csv')
 def download_csv():
     csv_path = os.path.join('data', 'CSE3_DBMS_team_details.csv')
     
     if os.path.exists(csv_path):
         # Create a temporary file with proper formatting
-        import tempfile
-        import shutil
-        
-        # Create a temp file
         temp_file = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.csv', newline='', encoding='utf-8')
         
         try:
@@ -826,13 +841,14 @@ def download_csv():
                 pass
     else:
         return "CSV file not found yet. Create some teams first!"
+
 def find_available_port(start_port=5000, max_attempts=10):
     """Find an available port starting from start_port"""
     for port in range(start_port, start_port + max_attempts):
         try:
             # Test if port is available
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.bind(('127.0.0.1', port))
+            sock.bind(('0.0.0.0', port))  # Changed to 0.0.0.0 to allow network access
             sock.close()
             return port
         except OSError:
@@ -844,10 +860,22 @@ if __name__ == '__main__':
     port = find_available_port(5000)
     
     if port:
-        print(f"Starting server on port {port}")
-        print(f"Access the application at: http://127.0.0.1:{port}")
-        print(f"CSV file will be created at: data/CSE3_DBMS_team_details.csv")
-        app.run(debug=True, port=port)
+        # Get local IP address
+        hostname = socket.gethostname()
+        local_ip = socket.gethostbyname(hostname)
+        
+        print("=" * 60)
+        print("🚀 SERVER STARTED SUCCESSFULLY!")
+        print("=" * 60)
+        print(f"📍 Local URL: http://127.0.0.1:{port}")
+        print(f"🌐 Network URL: http://{local_ip}:{port}")
+        print("\n📱 Share this link with classmates on same WiFi:")
+        print(f"👉 http://{local_ip}:{port}")
+        print("=" * 60)
+        print("\n📁 CSV file: data/CSE3_DBMS_team_details.csv")
+        print("=" * 60)
+        
+        app.run(debug=True, host='0.0.0.0', port=port)
     else:
         print("Error: Could not find an available port.")
         print("Please close some applications and try again.")
