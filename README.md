@@ -12,6 +12,7 @@ A web application for managing student team formations. This application allows 
 - View all formed teams
 - Responsive design
 
+
 ## Installation
 
 1. Clone the repository:
