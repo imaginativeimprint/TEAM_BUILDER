@@ -13,6 +13,7 @@ A web application for managing student team formations. This application allows 
 - Responsive design
 
 
+
 ## Installation
 
 1. Clone the repository:
