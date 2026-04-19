@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for, f
 from database import init_db, get_db
 import csv
 import os
-import sqlite3
 from datetime import datetime
 import socket
 import tempfile
