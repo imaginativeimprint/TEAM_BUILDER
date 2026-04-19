@@ -3,8 +3,10 @@ from libsql_client import create_client
 import sqlite3
 
 # Turso configuration - from environment variables
-TURSO_DATABASE_URL = os.environ.get('TURSO_DATABASE_URL')
-TURSO_AUTH_TOKEN = os.environ.get('TURSO_AUTH_TOKEN')
+TURSO_DATABASE_URL = os.environ.get('libsql://team-formation-app-imaginativeimprint.aws-ap-south-1.turso.io
+
+')
+TURSO_AUTH_TOKEN = os.environ.get('eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE3NzY1NjU1MzEsImlkIjoiMDE5ZGEzOGUtNDIwMS03NDVmLWI5MmMtYWI0YWJhZGQ3MzJmIiwicmlkIjoiZTc1NzU5OTUtYzg4NS00NTcxLWFmZGUtZWJhM2JmNjBmZTNjIn0.EYTnIC_t2WMmpl32Fbp5kbelLPg1X0zhVlIGCdFm20g4doZ569XUzGEW4GYBzw0VEWvI2HQ9lR3v9uyqErMUCQ')
 
 class TursoConnection:
     """A wrapper that makes Turso behave like sqlite3.Connection"""
